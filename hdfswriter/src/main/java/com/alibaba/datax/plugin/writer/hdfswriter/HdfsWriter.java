@@ -229,6 +229,9 @@ public class HdfsWriter extends Writer {
 
                 fullFileName = String.format("%s%s%s__%s", defaultFS, storePath, filePrefix, fileSuffix);
                 endFullFileName = String.format("%s%s%s__%s", defaultFS, endStorePath, filePrefix, fileSuffix);
+                if (mandatoryNumber == 1) {
+                    endFullFileName = String.format("%s%s%s", defaultFS, endStorePath, filePrefix);
+                }
 
                 while (allFiles.contains(endFullFileName)) {
                     fileSuffix = UUID.randomUUID().toString().replace('-', '_');

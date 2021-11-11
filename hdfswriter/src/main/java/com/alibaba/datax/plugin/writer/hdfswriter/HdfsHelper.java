@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public  class HdfsHelper {
     public static final Logger LOG = LoggerFactory.getLogger(HdfsWriter.Job.class);
@@ -132,7 +133,7 @@ public  class HdfsHelper {
     public Path[] hdfsDirList(String dir,String fileName){
         Path path = new Path(dir);
         Path[] files = null;
-        String filterFileName = fileName + "__*";
+        String filterFileName = fileName + "*";
         try {
             PathFilter pathFilter = new GlobFilter(filterFileName);
             FileStatus[] status = fileSystem.listStatus(path,pathFilter);
@@ -301,6 +302,10 @@ public  class HdfsHelper {
         }
         try {
             RecordWriter writer = outFormat.getRecordWriter(fileSystem, conf, outputPath.toString(), Reporter.NULL);
+
+            String header = columns.stream().map(conf -> conf.getString("name")).collect(Collectors.joining(","));
+            writer.write(NullWritable.get(), header);
+
             Record record = null;
             while ((record = lineReceiver.getFromReader()) != null) {
                 MutablePair<Text, Boolean> transportResult = transportOneRecord(record, fieldDelimiter, columns, taskPluginCollector);
