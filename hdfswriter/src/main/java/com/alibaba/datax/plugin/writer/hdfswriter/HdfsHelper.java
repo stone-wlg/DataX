@@ -302,9 +302,13 @@ public  class HdfsHelper {
         }
         try {
             RecordWriter writer = outFormat.getRecordWriter(fileSystem, conf, outputPath.toString(), Reporter.NULL);
-
-            String header = columns.stream().map(conf -> conf.getString("name")).collect(Collectors.joining(","));
-            writer.write(NullWritable.get(), header);
+            Boolean hasHeader = config.getBool(Key.HAS_HEADER, Constant.DEFAULT_HAS_HEADER);
+            if (hasHeader) {
+                String header = columns.stream()
+                        .map(conf -> conf.getString("name"))
+                        .collect(Collectors.joining(config.getString(Key.FIELD_DELIMITER)));
+                writer.write(NullWritable.get(), header);
+            }
 
             Record record = null;
             while ((record = lineReceiver.getFromReader()) != null) {

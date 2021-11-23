@@ -278,6 +278,16 @@ HdfsWriter提供向HDFS文件系统指定路径中写入TEXTFile文件和ORCFile
 
  	* 默认值：utf-8，**慎重修改** <br />
 
+* **hasHeader**
+
+	* 描述：是否要Header，默认true<br />
+
+	  如果配置true，则根据column.name组装Header。
+
+	* 必选：否 <br />
+
+	* 默认值：true <br />
+
 * **haveKerberos**
 
 	* 描述：是否有Kerberos认证，默认false<br />

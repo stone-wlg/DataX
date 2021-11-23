@@ -220,7 +220,6 @@ public class HdfsWriter extends Writer {
             this.path = endStorePath;
             for (int i = 0; i < mandatoryNumber; i++) {
                 // handle same file name
-
                 Configuration splitedTaskConfig = this.writerSliceConfig.clone();
                 String fullFileName = null;
                 String endFullFileName = null;
